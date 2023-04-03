@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  exercises: 
+    build:
+      dockerfile: docker/Dockerfile
+      context: .
+    container_name: exercises
+    hostname: exercises
+    volumes:
+      - .:/usr/src/service
+      - nodemodules:/usr/src/service/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run start:debug
+    ports:
+      - 80:3000
+      - 9229:9229
+
+  database:
+    image: mariadb:latest
+    container_name: exercises.database
+    hostname: exercises
+    volumes:
+      - database:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD  
+    
+volumes:
+  nodemodules:
+  database:
